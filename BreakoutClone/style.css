@@ -1,0 +1,78 @@
+.silkscreen-regular {
+    font-family: "Silkscreen", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  .silkscreen-bold {
+    font-family: "Silkscreen", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+/* center buttons and adjust spacing */
+.buttonContainer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* game container */
+.gameContainer {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    margin : 0 auto; /* center horizontally */
+}
+
+/* canvas styles */
+canvas {
+    background: #0e0d0d;
+    display: block;
+    margin: 0;
+}
+
+  /*  style for start button */
+#startButton {
+    position: absolute;
+    top: 50%;                    /* center vertically */
+    left: 50%;                    /* center horizontally */
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    background-color: #28a745; /* green background */
+    color: white;              /* white text */
+    font-size: 20px;        
+    padding: 15px 30px;
+    border: none;                /*remove default  border and round corners */
+    border-radius: 5px;
+    cursor: pointer;             /*change cursor on hover */
+    font-family: 'Silkscreen', sans-serif;
+    transition: background-color 0.3s; /*smooth hover effect */
+}
+
+  /* style for restart button */
+#restartButton {
+    position: absolute;
+    top: calc(50% + 48px); /* position below 'GAME OVER' text */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    background-color: #dc3545; /* red */
+    color: white;
+    font-size: 20px;
+    padding: 15px 30px; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Silkscreen', sans-serif;
+    transition: background-color 0.3s;
+}
+
+  /* hover effects for buttons */
+#startButton:hover {
+    background-color: #218838; /* darker green */
+}
+
+#restartButton:hover {
+    background-color: #c82333; /* darker red */
+}
+

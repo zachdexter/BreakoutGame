@@ -1,0 +1,35 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+    <title>Breakout Game</title>
+    <style>
+        canvas {
+            background: #0e0d0d;
+            display: block;
+            margin: 0 auto
+        }
+    </style>
+</head>
+<body>
+    <div class="gameContainer">
+        <div class="canvasContainer">
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+        </div>
+        <!-- start Button -->
+        <button id="startButton">Start Game</button>
+
+        <!-- restart Button -->
+        <button id="restartButton">Restart Game</button>
+
+        <!-- level pass Button -->
+        <button id="nextLevelButton">Next Level</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

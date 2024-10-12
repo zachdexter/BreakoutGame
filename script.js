@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
 const restartButton = document.getElementById('restartButton');
 const nextLevelButton = document.getElementById('nextLevelButton');
+const heartImage = new Image();
+heartImage.src = 'heart.png';
 nextLevelButton.style.display = 'none';
 restartButton.style.display = 'none';
 let gameRunning = false;
@@ -50,6 +52,7 @@ let brickOffsetLeft = 40;   //left offset for brick grid
 let bricksHit = 0;
 let score = 0;
 let lives = 3;
+let extraLives = [];
 let gameOver = false;
 
 //bricks array
@@ -61,7 +64,7 @@ let bricks = [];
 //health 2 - visible, two hit to break
 
 //event listeners for key presses/releases
-startButton.addEventListener('click', startLevel);
+startButton.addEventListener('click', startGame);
 restartButton.addEventListener('click', startGame);
 nextLevelButton.addEventListener('click', startLevel);
 document.addEventListener('keydown', keyDownHandler, false); //triggered when key is pressed down
@@ -231,11 +234,30 @@ function collisionDetection() {
                             score+=10;
                         }
                     }
-                    if(bricksHit == 3) {
+                    if(bricksHit == totalBricks) {
                         levelPass = true;
                     }
                 }
 
+            }
+        }
+    }
+}
+
+function extraLifeCollisionDetection() {
+    for (let i = 0; i < extraLives.length; i++) {
+        let life = extraLives[i];
+        if (!life.collected) {
+            //calc distance between ball and extra life
+            let distX = x - life.x;
+            let distY = y - life.y;
+            let distance = Math.sqrt(distX * distX + distY * distY);
+
+            //check for collision
+            if(distance < ballRadius + life.radius) {
+                //collision detected
+                life.collected = true;
+                lives++;
             }
         }
     }
@@ -251,9 +273,44 @@ function drawScore() {
 
 //lives counter top right
 function drawLives() {
-    ctx.font = '16px Arial';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText('Lives: ' + lives, canvas.width - 35, 20); //lives at top right corner
+    const heartWidth = 25;
+    const heartHeight = 20;
+    const spacing = 5;
+    const startX = canvas.width - (heartWidth + spacing) * lives - 35;
+    const yPosition = 10;
+
+    for(let i = 0; i <lives; i++) {
+        ctx.drawImage(heartImage, startX + i * (heartWidth + spacing), yPosition, heartWidth, heartHeight);
+    }
+}
+
+function drawExtraLives() {
+    for (let i = 0; i < extraLives.length; i++) {
+        let life = extraLives[i];
+        if(!life.collected) {
+            ctx.beginPath();
+            ctx.arc(life.x, life.y, life.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffcccc'; // Light red color
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#ff0000'; // Red border
+            ctx.stroke();
+            ctx.closePath();
+            
+
+            //draw heart image at center
+
+            let heartWidth = life.radius * 1.2;
+            let heartHeight = life.radius * 1.2;
+            ctx.drawImage( 
+                heartImage,
+                life.x - heartWidth/2,
+                life.y - heartHeight/2,
+                heartWidth,
+                heartHeight
+            );
+        }
+    }
 }
 
 function drawGameOver() {
@@ -342,6 +399,7 @@ function draw() {
     drawPaddle();
     drawScore();
     drawLives();
+    drawExtraLives();
 
     if (countdown !== null) {
         ctx.font = '48px Arial';
@@ -352,6 +410,7 @@ function draw() {
 
     //handle game logic
     collisionDetection();
+    extraLifeCollisionDetection();
 
     if (levelPass == true) {
         level++;
@@ -473,15 +532,14 @@ function draw() {
 }
 
 function resetGame() {
-    if (gameOver || level >= 3) {
-        level = 1; 
-        score = 0;
-    }
     gameRunning = false;
     levelPass = false;
-
+    gameOver = false;
     bricksHit = 0;
-    lives = 3;
+    totalBricks = 0;
+    bricks = [];
+    extraLives = [];
+
 
     x = canvas.width /2;
     y = canvas.height - 250;
@@ -505,6 +563,7 @@ function resetGame() {
             else if(level == 2) {
                 //level 2, start with health 1
                 bricks[c][r].health = 1;
+                totalBricks++;
             }
         }
     }
@@ -514,20 +573,51 @@ function resetGame() {
         //holes in brick grid
         let holes = [ [1,2], [1,3], [2,2], [2,3], [3,2], [3,3], [8,2], [8,3], [9,2], [9,3], [10,2], [10,3] ];
         for(let [c, r] of holes) {
-            bricks[c][r].health = 0;
-            totalBricks--; //adjust totalbricks
+            if(bricks[c][r].health > 0) {
+                bricks[c][r].health = 0;
+                totalBricks--
+            }
         }
 
         //set two hit bricks
         let twoHitBricks = [ [5,2], [5,3], [6,2], [6,3] ];
         for(let [c, r] of twoHitBricks) {
-            bricks[c][r].health = 2;
+            if (bricks[c][r].health > 0) {
+                bricks[c][r].health = 2;
+            }
         }
 
         //bottom row health 2
         for(let i = 0; i < brickColumnCount; i++) {
-            bricks[i][9].health = 2;
+            if (bricks[i][9].health > 0) {
+                bricks[i][9].health = 2;
+            }
         }
+
+        let extraLifePositions = [
+            { c: 2, rStart: 2, rEnd: 3 }, // First extra life between rows 2 and 3
+            { c: 9, rStart: 2, rEnd: 3 }  // Second extra life between rows 2 and 3
+        ];
+
+        for (let pos of extraLifePositions) {
+            let c = pos.c;
+            let rStart = pos.rStart;
+            let rEnd = pos.rEnd;
+        
+            // Calculate horizontal position (same as before)
+            let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+            let brickCenterX = brickX + brickWidth / 2;
+        
+            // Calculate vertical position to be centered between rStart and rEnd
+            let brickYStart = (rStart * (brickHeight + brickPadding)) + brickOffsetTop;
+            let brickYEnd = ((rEnd * (brickHeight + brickPadding)) + brickOffsetTop) + brickHeight;
+            let brickCenterY = (brickYStart + brickYEnd) / 2;
+        
+            // Add extra life pickup at the center of the hole
+            extraLives.push({ x: brickCenterX, y: brickCenterY, radius: 10, collected: false });
+        }
+
+        
     }
 
     clearCanvas();
@@ -563,9 +653,13 @@ function startLevel() {
 //start or restart game
 function startGame() {
     clearCanvas();
+    level = 1;
+    lives = 3;
     score = 0;
+    bricksHit = 0;
     startButton.style.display = 'none';
     restartButton.style.display = 'none';
+    nextLevelButton.style.display = 'none';
     resetGame();
     gameRunning = true;
     gameOver = false;

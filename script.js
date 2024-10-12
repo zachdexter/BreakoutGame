@@ -231,7 +231,7 @@ function collisionDetection() {
                             score+=10;
                         }
                     }
-                    if(bricksHit == totalBricks) {
+                    if(bricksHit == 3) {
                         levelPass = true;
                     }
                 }
@@ -468,21 +468,20 @@ function draw() {
     } else if(gameOver) {
         //draw game over screen
         drawGameOver();
-        level = 1; //reset to level 1
-
-        requestAnimationFrame(draw);
     } 
 
 }
 
 function resetGame() {
+    if (gameOver || level >= 3) {
+        level = 1; 
+        score = 0;
+    }
     gameRunning = false;
     levelPass = false;
 
     bricksHit = 0;
-    if(level == 1) {
-        lives = 3;
-    }
+    lives = 3;
 
     x = canvas.width /2;
     y = canvas.height - 250;
@@ -564,6 +563,7 @@ function startLevel() {
 //start or restart game
 function startGame() {
     clearCanvas();
+    score = 0;
     startButton.style.display = 'none';
     restartButton.style.display = 'none';
     resetGame();

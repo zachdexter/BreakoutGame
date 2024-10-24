@@ -35,7 +35,7 @@ Follow these instructions to get a copy of the game running on your local machin
 2. **Navigate to the Project Directory**
 
     ```bash
-    cd breakout-game
+    cd BreakoutGame
     ```
 
 3. **Open the Game**

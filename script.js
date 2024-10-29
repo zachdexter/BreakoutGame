@@ -464,7 +464,7 @@ function draw() {
             let relativeHitPos = (x - (paddleX + paddleWidth / 2)) / (paddleWidth / 2); 
             
             dx = relativeHitPos * maxSpeed;
-
+            
             //ball missed paddle
             } else if(y > canvas.height + 100){
                 lives--;
@@ -551,7 +551,7 @@ function resetGame() {
     totalBricks = 0;
 
     for(let c = 0; c < brickColumnCount; c++) {
-        bricks[c] = [];;
+        bricks[c] = [];
         for(let r = 0; r < brickRowCount; r++) {
             bricks[c][r] = { x: 0, y: 0, health: 0}; //initialize all bricks w/ health 0
 

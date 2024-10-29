@@ -11,18 +11,30 @@ A classic brick-breaker game implemented in JavaScript using HTML5 Canvas. Contr
 - **Scoring System**: Earn points by breaking bricks.
 - **Stylish Graphics**: Retro-inspired design with custom fonts and animations.
 
-## Demo
+## Screenshot
 
 ![Game Screenshot](BreakoutScreenshot.png)
 
 ## Getting Started
 
-Follow these instructions to get a copy of the game running on your local machine.
+Follow the [Installation](#installation) instructions to get a copy of the game running on your local machine. Or play via [my website](https://zacharydexter.com/breakout/breakout.html).
 
 ### Prerequisites
 
-- A modern web browser (Chrome, Firefox, Safari, Edge).
+- Computer with a modern web browser.
 - Internet connection to load external fonts (or see the [Offline Usage](#offline-usage) section).
+
+## How To Play
+
+- **Start the Game:** Click on the **Start Game** button.
+- **Control the Paddle:**
+    - **Mouse:** Move the paddle by moving your mouse horizontally.
+    - **Keyboard:** Use the left and right arrow keys to move the paddle.
+- **Objective:** Bounce the ball using the paddle to break all the bricks.
+- **Lives:** You start with 3 lives. Collect extra lives by hitting heart pickups. Lives are lost when the ball misses the paddle and falls off the bottom of the screen.
+- **Levels:** Clear all bricks to advance to the next level.
+- **Game Over:** Lose all your lives, and the game ends.
+- **Restart:** Click on Restart Game to play again.
 
 ### Installation
 
@@ -35,7 +47,7 @@ Follow these instructions to get a copy of the game running on your local machin
 2. **Navigate to the Project Directory**
 
     ```bash
-    cd breakout-game
+    cd BreakoutGame
     ```
 
 3. **Open the Game**
@@ -54,17 +66,6 @@ Follow these instructions to get a copy of the game running on your local machin
         ```
         Then navigate to displayed URL.
 
-## How To Play
-
-- **Start the Game:** Click on the **Start Game** button.
-- **Control the Paddle:**
-    - **Mouse:** Move the paddle by moving your mouse horizontally.
-    - **Keyboard:** Use the left and right arrow keys to move the paddle.
-- **Objective:** Bounce the ball using the paddle to break all the bricks.
-- **Lives:** You start with 3 lives. Collect extra lives by hitting heart pickups.
-- **Levels:** Clear all bricks to advance to the next level.
-- **Game Over:** Lose all your lives, and the game ends.
-- **Restart:** Click on Restart Game to play again.
 
 ## Game Structure
 
